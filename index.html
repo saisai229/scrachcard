@@ -707,6 +707,92 @@
     }
 
     // ==================== 4. UI NAVIGATION ====================
+    let toastTimer = null;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.classList.remove('opacity-0');
+      toast.classList.add('opacity-100');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('opacity-100');
+        toast.classList.add('opacity-0');
+      }, 3000);
+    }
+
+    function navigateTo(screenName) {
+      const screens = ['login', 'home', 'wallet', 'redeemed', 'profile'];
+      screens.forEach(s => {
+        const el = document.getElementById(`screen-${s}`);
+        if (el) {
+          if (s === screenName) {
+            el.classList.remove('hidden');
+            el.classList.add('flex');
+          } else {
+            el.classList.add('hidden');
+            el.classList.remove('flex');
+          }
+        }
+      });
+      if (screenName !== 'login') {
+        updateUI();
+      }
+    }
+
+    function updateUI() {
+      const homePts = document.getElementById('homePointsDisplay');
+      const walletBal = document.getElementById('walletBalanceDisplay');
+      const profName = document.getElementById('profileNameDisplay');
+      const profPhone = document.getElementById('profilePhoneDisplay');
+
+      if (homePts) homePts.textContent = `₹${state.homePoints}`;
+      if (walletBal) walletBal.textContent = `₹${state.walletPoints}`;
+      if (profName) profName.textContent = state.user.name;
+      if (profPhone) profPhone.textContent = state.user.phone;
+
+      // Render Wallet Transaction History
+      const walletList = document.getElementById('walletTransactionListContainer');
+      if (walletList) {
+        if (!state.transactions || state.transactions.length === 0) {
+          walletList.innerHTML = `<p class="text-xs text-stone-500 text-center py-6 bg-white rounded-2xl border border-amber-100">No transactions yet.</p>`;
+        } else {
+          walletList.innerHTML = state.transactions.map(tx => {
+            const isCredit = tx.type === 'credit';
+            return `
+              <div class="bg-white border border-amber-200/80 rounded-2xl p-3.5 flex items-center justify-between shadow-sm">
+                <div>
+                  <p class="text-xs font-extrabold text-stone-900">${tx.title}</p>
+                  <p class="text-[10px] text-stone-500 mt-0.5">${tx.date}</p>
+                </div>
+                <span class="text-sm font-black ${isCredit ? 'text-green-600' : 'text-red-600'}">
+                  ${isCredit ? '+' : '-'}₹${tx.points}
+                </span>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      // Render Redeemed History
+      const redeemedList = document.getElementById('redeemedListContainer');
+      if (redeemedList) {
+        const debits = (state.transactions || []).filter(tx => tx.type === 'debit');
+        if (debits.length === 0) {
+          redeemedList.innerHTML = `<p class="text-xs text-stone-500 text-center py-8 bg-white rounded-2xl border border-amber-100">No redeemed transactions yet.</p>`;
+        } else {
+          redeemedList.innerHTML = debits.map(tx => `
+            <div class="bg-white border border-amber-200/80 rounded-2xl p-4 flex items-center justify-between shadow-sm">
+              <div>
+                <p class="text-xs font-extrabold text-stone-900">${tx.title}</p>
+                <p class="text-[10px] text-stone-500 mt-0.5">${tx.date}</p>
+              </div>
+              <span class="text-sm font-black text-red-600">-₹${tx.points}</span>
+            </div>
+          `).join('');
+        }
+      }
+    }
 
     function toggleSidebar(open) {
       const drawer = document.getElementById('sidebarDrawer');
