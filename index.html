@@ -5,581 +5,551 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KARTHIK Men's Wear</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <!-- Firebase Compat SDKs for Realtime Database -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <!-- HTML5 QR & Barcode Scanner Library -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <!-- QRCode Generator Library for Instant Local High-Res QR & Download -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
-    body { font-family: 'Inter', sans-serif; background-color: #0b0b0b; color: #f5f5f5; }
-    .gold-gradient { background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%); }
-    .gold-text { background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .dark-card { background: linear-gradient(145deg, #181818, #111111); border: 1px solid rgba(191, 149, 63, 0.25); }
-    .cream-input { background: #FAF6ED; color: #1A1A1A; border: 1px solid #E6D5B8; }
-    .cream-input::placeholder { color: #8C7A5E; }
-    .modal-backdrop { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #030b1a;
+      color: #ffffff;
+    }
+    /* Royal Navy Blue Background matching reference UI */
+    .navy-bg {
+      background: radial-gradient(circle at 50% 15%, #0e2c66 0%, #07193d 55%, #040f26 100%);
+    }
+    /* Rich Gold Button & Text Gradients */
+    .gold-btn {
+      background: linear-gradient(180deg, #fce28b 0%, #f5b935 45%, #d68e13 100%);
+      box-shadow: 0 8px 20px rgba(214, 142, 19, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    }
+    .gold-text {
+      background: linear-gradient(180deg, #ffe89e 0%, #f7be3b 55%, #d99116 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    /* Glass Navy Card for Wallet Balance */
+    .navy-glass-card {
+      background: linear-gradient(145deg, rgba(16, 48, 108, 0.72), rgba(7, 25, 62, 0.88));
+      border: 1px solid rgba(110, 165, 255, 0.25);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+    .white-pill-input {
+      background: #ffffff;
+      color: #0f172a;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    .white-pill-input::placeholder {
+      color: #64748b;
+    }
+    .modal-backdrop {
+      background: rgba(2, 8, 22, 0.88);
+      backdrop-filter: blur(6px);
+    }
   </style>
 </head>
 <body class="flex justify-center items-center min-h-screen p-0 sm:p-4">
 
   <!-- Mobile Frame Container -->
-  <div class="w-full max-w-[430px] h-[100vh] sm:h-[880px] bg-[#0c0c0c] sm:rounded-[40px] shadow-2xl border-0 sm:border-4 border-[#332814] flex flex-col relative overflow-hidden">
-    
+  <div class="w-full max-w-[430px] h-[100vh] sm:h-[880px] navy-bg sm:rounded-[40px] shadow-2xl border-0 sm:border-[3px] border-[#1c3f82] flex flex-col relative overflow-hidden">
+
+    <!-- Decorative Bottom Golden Wave SVG (Shared Visual Accent) -->
+    <svg class="absolute bottom-0 left-0 right-0 w-full h-24 pointer-events-none z-0 opacity-95" viewBox="0 0 430 110" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="goldWaveGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#c97e10" />
+          <stop offset="50%" stop-color="#f8cb58" />
+          <stop offset="100%" stop-color="#b86e09" />
+        </linearGradient>
+        <linearGradient id="goldWaveGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#f7c443" />
+          <stop offset="50%" stop-color="#ffe89e" />
+          <stop offset="100%" stop-color="#d48812" />
+        </linearGradient>
+      </defs>
+      <path d="M-10,55 Q110,115 240,70 T440,55 L440,110 L-10,110 Z" fill="#040d21" opacity="0.7" />
+      <path d="M-10,62 Q115,112 245,74 T440,48 L440,60 Q245,86 115,118 T-10,72 Z" fill="url(#goldWaveGrad1)" />
+      <path d="M-10,82 Q130,118 265,78 T440,62 L440,70 Q265,88 130,122 T-10,90 Z" fill="url(#goldWaveGrad2)" />
+    </svg>
+
     <!-- Toast Notification Box -->
-    <div id="toast" class="absolute top-5 left-1/2 -translate-x-1/2 z-50 bg-[#1c1c1c] border border-amber-500 text-amber-300 px-5 py-2.5 rounded-full shadow-2xl text-xs font-bold transition-all duration-300 opacity-0 pointer-events-none">
+    <div id="toast" class="absolute top-6 left-1/2 -translate-x-1/2 z-50 bg-[#081d45] border border-amber-400 text-amber-200 px-5 py-2.5 rounded-full shadow-2xl text-xs font-bold transition-all duration-300 opacity-0 pointer-events-none whitespace-nowrap">
       Message
     </div>
 
-    <!-- ==================== 1. LOGIN / REGISTER SCREEN ==================== -->
-    <div id="screen-login" class="flex-1 flex flex-col justify-between p-6 relative overflow-y-auto">
-      <!-- Background glowing decorative circles -->
-      <div class="absolute -top-24 -left-24 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute top-1/2 -right-24 w-64 h-64 bg-amber-600/10 rounded-full blur-3xl pointer-events-none"></div>
+    <!-- ==================== 1. LOGIN SCREEN (Matching Image Screen 1) ==================== -->
+    <div id="screen-login" class="flex-1 flex flex-col justify-between px-7 pt-10 pb-6 relative z-10 overflow-y-auto">
+      
+      <!-- Top Hexagonal Emblem & Brand Header -->
+      <div class="pt-4 text-center flex flex-col items-center">
+        <!-- Gold Hexagonal Monogram Logo -->
+        <div class="w-24 h-24 mb-4 flex items-center justify-center drop-shadow-[0_6px_18px_rgba(245,185,53,0.3)]">
+          <svg viewBox="0 0 120 130" class="w-full h-full">
+            <defs>
+              <linearGradient id="hexGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffe999" />
+                <stop offset="50%" stop-color="#f3b633" />
+                <stop offset="100%" stop-color="#c97e10" />
+              </linearGradient>
+            </defs>
+            <!-- Outer Hexagon -->
+            <polygon points="60,6 110,34 110,94 60,122 10,94 10,34" fill="none" stroke="url(#hexGold)" stroke-width="6" stroke-linejoin="round" />
+            <!-- Inner Geometric Monogram -->
+            <path d="M42,38 L42,90 M42,64 L76,36 M54,54 L80,90" stroke="url(#hexGold)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+          </svg>
+        </div>
 
-      <!-- Top Header / Logo -->
-      <div class="pt-8 text-center flex flex-col items-center">
-        <div class="w-20 h-20 gold-gradient rounded-2xl p-1 shadow-xl shadow-amber-500/10 flex items-center justify-center mb-4 transform hover:scale-105 transition">
-          <div class="w-full h-full bg-[#121212] rounded-xl flex items-center justify-center">
-            <svg class="w-10 h-10 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-            </svg>
-          </div>
-        </div>
-        <h1 class="text-3xl font-black tracking-wider gold-text uppercase">KARTHIK</h1>
-        <p class="text-xs font-extrabold text-amber-400/90 tracking-widest mt-0.5 uppercase">Men's Wear</p>
-        <div class="flex items-center gap-2 mt-2">
-          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-          <span class="text-[11px] font-bold text-stone-400 tracking-wide">Coupons • Rewards • Earn</span>
-        </div>
+        <h1 class="text-3xl font-extrabold tracking-tight gold-text">KARTHIK</h1>
+        <p class="text-xs font-bold text-amber-300/90 tracking-widest uppercase mt-0.5">Men's Wear</p>
+        <p class="text-xs font-medium text-blue-100/90 tracking-wide mt-2">Scan • Earn • Redeem</p>
       </div>
 
-      <!-- Login Form Card -->
-      <div class="dark-card rounded-3xl p-6 shadow-xl my-auto">
-        <h2 class="text-lg font-bold text-stone-100 mb-1">Welcome Back!</h2>
-        <p class="text-xs text-stone-400 mb-5">Login with your mobile number to continue</p>
-
+      <!-- Center Login Form (Pill Inputs + Gold Login Button) -->
+      <div class="my-auto py-4">
         <form onsubmit="handleLogin(event)" class="space-y-4">
-          <div>
-            <label class="block text-[11px] font-bold text-stone-300 mb-1 uppercase tracking-wider">Mobile Number</label>
-            <div class="cream-input rounded-2xl px-4 py-3 flex items-center gap-3">
-              <span class="text-sm font-bold text-stone-600 border-r border-amber-300 pr-2">+91</span>
-              <input id="loginPhone" type="tel" maxlength="10" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)" placeholder="Enter 10-digit number" class="w-full bg-transparent text-sm font-bold focus:outline-none" required />
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-[11px] font-bold text-stone-300 mb-1 uppercase tracking-wider">Password</label>
-            <div class="cream-input rounded-2xl px-4 py-3 flex items-center justify-between">
-              <input id="loginPassword" type="password" placeholder="Enter password" class="w-full bg-transparent text-sm font-bold focus:outline-none" required />
-              <button type="button" onclick="togglePassword('loginPassword')" class="text-stone-500 hover:text-stone-800 focus:outline-none">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <button type="submit" class="w-full gold-gradient hover:opacity-95 text-stone-950 font-black py-3.5 rounded-2xl shadow-lg transition active:scale-95 cursor-pointer flex items-center justify-center gap-2 mt-2">
-            <span>Login</span>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+          <!-- Mobile Number Input -->
+          <div class="white-pill-input rounded-2xl px-4 py-3.5 flex items-center gap-3">
+            <svg class="w-5 h-5 text-[#0a2351] shrink-0" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
             </svg>
+            <input id="loginPhone" type="tel" maxlength="10" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)" placeholder="Mobile Number" class="w-full bg-transparent text-sm font-semibold text-slate-900 focus:outline-none" required />
+          </div>
+
+          <!-- Password Input -->
+          <div class="white-pill-input rounded-2xl px-4 py-3.5 flex items-center gap-3">
+            <svg class="w-5 h-5 text-[#0a2351] shrink-0" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+            </svg>
+            <input id="loginPassword" type="password" placeholder="Password" class="w-full bg-transparent text-sm font-semibold text-slate-900 focus:outline-none" required />
+            <button type="button" onclick="togglePassword('loginPassword')" class="text-slate-400 hover:text-slate-700 focus:outline-none">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Gold Login Button -->
+          <button type="submit" class="w-full gold-btn hover:brightness-105 text-[#091b3e] font-extrabold text-base py-3.5 rounded-2xl transition active:scale-95 cursor-pointer mt-2">
+            Login
           </button>
         </form>
 
-        <div class="mt-5 text-center">
-          <button type="button" onclick="openModal('registerModal')" class="text-xs font-bold text-amber-400 hover:text-amber-300 underline underline-offset-4 cursor-pointer">
-            Create account
+        <!-- Decorative Divider & Create Account -->
+        <div class="mt-6 flex items-center justify-center gap-3">
+          <span class="h-[1px] w-10 bg-amber-400/60"></span>
+          <button type="button" onclick="openModal('registerModal')" class="text-xs font-bold text-amber-300 hover:text-amber-200 tracking-wide cursor-pointer">
+            Create Account • Enjoy the Rewards!
           </button>
+          <span class="h-[1px] w-10 bg-amber-400/60"></span>
         </div>
       </div>
 
-      <!-- Footer Info -->
-      <div class="text-center pb-2 space-y-2">
-        <p class="text-[11px] text-stone-500">© 2026 KARTHIK Men's Wear. All rights reserved.</p>
-        <button type="button" onclick="openModal('adminModal')" class="text-[11px] font-bold text-amber-400/80 hover:text-amber-300 underline underline-offset-4 cursor-pointer">
+      <!-- Footer Info with Admin Button -->
+      <div class="text-center pb-4 space-y-1.5 relative z-10">
+        <p class="text-[11px] text-blue-200/60">© 2026 KARTHIK Men's Wear. All rights reserved.</p>
+        <button type="button" onclick="openModal('adminModal')" class="text-[11px] font-bold text-amber-300/90 hover:text-amber-200 underline underline-offset-4 cursor-pointer">
           Admin
         </button>
       </div>
     </div>
 
-    <!-- ==================== 2. HOME SCREEN ==================== -->
-    <div id="screen-home" class="flex-1 hidden flex-col bg-[#FAF6ED] text-[#1A1A1A] relative overflow-hidden">
-      <!-- App Header (Notification & top Admin removed as requested) -->
-      <div class="bg-[#121212] text-white px-5 pt-6 pb-4 rounded-b-[30px] shadow-lg flex items-center justify-between">
-        <button onclick="toggleSidebar(true)" class="p-2 rounded-xl bg-stone-800/80 hover:bg-stone-700 text-amber-400 transition cursor-pointer">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+    <!-- ==================== 2. HOME / WALLET MAIN SCREEN (Matching Image Screen 2) ==================== -->
+    <div id="screen-home" class="flex-1 hidden flex-col relative z-10 overflow-hidden">
+      <!-- Top Header (3-lines Menu, Title, Profile Circle Icon) -->
+      <div class="px-5 pt-6 pb-3 flex items-center justify-between">
+        <button onclick="toggleSidebar(true)" class="p-2 rounded-xl text-white hover:bg-white/10 transition cursor-pointer">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
           </svg>
         </button>
-        <div class="flex items-center gap-2">
-          <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+        <h2 class="text-lg font-extrabold tracking-wide text-white">KARTHIK</h2>
+        <button onclick="navigateTo('profile')" class="w-9 h-9 rounded-full border border-blue-200/60 flex items-center justify-center text-white hover:bg-white/10 transition cursor-pointer">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
           </svg>
-          <div class="flex flex-col">
-            <span class="text-lg font-black tracking-wider gold-text uppercase leading-none">KARTHIK</span>
-            <span class="text-[9px] font-extrabold text-amber-400/90 tracking-widest uppercase">Men's Wear</span>
+        </button>
+      </div>
+
+      <!-- Scrollable Main Content -->
+      <div class="flex-1 overflow-y-auto px-5 pt-2 pb-20 space-y-5">
+        
+        <!-- Glass Navy Wallet Balance Card (Exact layout from Screen 2) -->
+        <div class="navy-glass-card rounded-3xl p-6 flex items-center gap-5">
+          <!-- Gold Wallet Icon -->
+          <div class="w-16 h-16 shrink-0 flex items-center justify-center">
+            <svg viewBox="0 0 64 64" class="w-14 h-14 drop-shadow-md">
+              <defs>
+                <linearGradient id="walletGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ffe794" />
+                  <stop offset="55%" stop-color="#f4b632" />
+                  <stop offset="100%" stop-color="#c97d0e" />
+                </linearGradient>
+              </defs>
+              <rect x="6" y="14" width="48" height="38" rx="8" fill="url(#walletGold)" />
+              <path d="M12,14 L46,8 C49,7.5 52,9.5 52,13 L52,16 L12,16 Z" fill="#d99116" />
+              <rect x="40" y="27" width="18" height="12" rx="4" fill="#ffe794" stroke="#b86e09" stroke-width="1.5" />
+              <circle cx="46" cy="33" r="2.2" fill="#07193d" />
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-blue-100/90">Wallet Balance</p>
+            <h1 id="homePointsDisplay" class="text-4xl font-black gold-text mt-0.5 tracking-tight">₹ 0.00</h1>
           </div>
         </div>
+
+        <!-- Prominent Gold Scan Coupon Button -->
+        <button type="button" onclick="openScannerModal()" class="w-full gold-btn hover:brightness-105 text-[#091b3e] font-extrabold text-base py-4 rounded-2xl transition active:scale-95 cursor-pointer flex items-center justify-center gap-3">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 7V5a2 2 0 012-2h2m10 0h2a2 2 0 012 2v2m0 10v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2M7 12h10"/>
+          </svg>
+          <span>Scan Coupon</span>
+        </button>
+      </div>
+
+      <!-- Bottom Navigation Tabs & Starting Footer -->
+      <div class="relative z-10 px-4 pt-2 pb-3 bg-[#05122b]/95 border-t border-blue-300/15">
+        <div class="grid grid-cols-3 gap-2 mb-2">
+          <button type="button" onclick="navigateTo('home')" class="py-2 px-2 rounded-xl gold-btn text-[#091b3e] font-extrabold text-xs cursor-pointer">
+            Home
+          </button>
+          <button type="button" onclick="navigateTo('wallet')" class="py-2 px-2 rounded-xl bg-white/10 hover:bg-white/15 text-amber-300 font-bold text-xs border border-amber-400/30 cursor-pointer">
+            Wallet
+          </button>
+          <button type="button" onclick="navigateTo('redeemed')" class="py-2 px-2 rounded-xl bg-white/10 hover:bg-white/15 text-blue-100 font-bold text-xs border border-blue-300/20 cursor-pointer">
+            Redeem
+          </button>
+        </div>
+        <p class="text-[10px] text-center text-blue-200/60">© 2026 KARTHIK Men's Wear. All rights reserved.</p>
+      </div>
+    </div>
+
+    <!-- ==================== 2B. WALLET DETAIL SCREEN (Balance & Credited Amounts Only) ==================== -->
+    <div id="screen-wallet" class="flex-1 hidden flex-col relative z-10 overflow-hidden">
+      <div class="px-5 pt-6 pb-3 flex items-center justify-between">
+        <button onclick="navigateTo('home')" class="p-2 rounded-xl text-white hover:bg-white/10 cursor-pointer">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <h2 class="text-lg font-extrabold tracking-wide text-white">Wallet</h2>
+        <button onclick="navigateTo('profile')" class="w-9 h-9 rounded-full border border-blue-200/60 flex items-center justify-center text-white hover:bg-white/10 transition cursor-pointer">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="flex-1 overflow-y-auto px-5 pt-2 pb-6 space-y-5">
+        <!-- Wallet Balance Card -->
+        <div class="navy-glass-card rounded-3xl p-5 flex items-center justify-between">
+          <div>
+            <p class="text-xs font-semibold text-blue-100/80 uppercase tracking-wider">Wallet Balance</p>
+            <h3 id="walletDetailBalance" class="text-3xl font-black gold-text mt-1">₹ 0.00</h3>
+          </div>
+          <span class="text-xs font-extrabold text-emerald-300 bg-emerald-500/15 border border-emerald-400/30 px-3 py-1 rounded-full">Credits Only</span>
+        </div>
+
+        <!-- Credited Amounts Section (+) -->
+        <div>
+          <h3 class="text-xs font-extrabold uppercase tracking-wider text-emerald-300 mb-2.5">Credited Amounts</h3>
+          <div id="walletCreditListContainer" class="space-y-2.5"></div>
+        </div>
+      </div>
+
+      <!-- Bottom Navigation Tabs & Starting Footer -->
+      <div class="relative z-10 px-4 pt-2 pb-3 bg-[#05122b]/95 border-t border-blue-300/15">
+        <div class="grid grid-cols-3 gap-2 mb-2">
+          <button type="button" onclick="navigateTo('home')" class="py-2 px-2 rounded-xl bg-white/10 hover:bg-white/15 text-blue-100 font-bold text-xs border border-blue-300/20 cursor-pointer">
+            Home
+          </button>
+          <button type="button" onclick="navigateTo('wallet')" class="py-2 px-2 rounded-xl gold-btn text-[#091b3e] font-extrabold text-xs cursor-pointer">
+            Wallet
+          </button>
+          <button type="button" onclick="navigateTo('redeemed')" class="py-2 px-2 rounded-xl bg-white/10 hover:bg-white/15 text-blue-100 font-bold text-xs border border-blue-300/20 cursor-pointer">
+            Redeem
+          </button>
+        </div>
+        <p class="text-[10px] text-center text-blue-200/60">© 2026 KARTHIK Men's Wear. All rights reserved.</p>
+      </div>
+    </div>
+
+    <!-- ==================== 3. REDEEMED HISTORY SCREEN ==================== -->
+    <div id="screen-redeemed" class="flex-1 hidden flex-col relative z-10 overflow-hidden">
+      <div class="px-5 pt-6 pb-4 flex items-center justify-between">
+        <button onclick="navigateTo('home')" class="p-2 rounded-xl text-white hover:bg-white/10 cursor-pointer">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <h2 class="text-lg font-extrabold tracking-wide text-white">Redeemed History</h2>
         <div class="w-10"></div>
       </div>
 
-      <!-- Scrollable Home Content -->
-      <div class="flex-1 overflow-y-auto p-5 pb-24 space-y-5">
-        <!-- Points Card Bar -->
-        <div class="bg-gradient-to-r from-[#1E190E] via-[#2F240C] to-[#1E190E] border border-amber-500/40 rounded-3xl p-5 text-white shadow-xl flex items-center justify-between">
-          <div>
-            <p class="text-xs font-bold text-amber-300/80 uppercase tracking-widest">Your Balance</p>
-            <h2 id="homePointsDisplay" class="text-3xl font-black gold-text mt-1">₹250</h2>
-          </div>
-          <div class="w-14 h-14 rounded-2xl gold-gradient p-0.5 shadow-lg flex items-center justify-center">
-            <div class="w-full h-full bg-[#121212] rounded-[14px] flex items-center justify-center text-amber-400">
-              <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        <!-- Enter Coupon Code Section Only -->
-        <div class="bg-white border border-amber-200 rounded-3xl p-6 shadow-sm">
-          <label class="block text-sm font-extrabold text-stone-900 mb-2">Enter Coupon Code</label>
-          <p class="text-xs text-stone-500 mb-4">Enter your store bill coupon code below to claim instant rewards into your wallet.</p>
-          <div class="flex gap-2">
-            <input id="couponCodeInput" type="text" placeholder="e.g. KARTHIK100" class="flex-1 cream-input rounded-2xl px-4 py-3.5 text-xs font-extrabold uppercase focus:outline-none" />
-            <button onclick="applyCoupon()" class="bg-[#121212] hover:bg-black text-amber-400 font-extrabold px-5 py-3.5 rounded-2xl text-xs flex items-center gap-1.5 shadow transition cursor-pointer">
-              <span>Add</span>
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Bottom Nav Bar -->
-      <div class="absolute bottom-0 left-0 right-0 bg-[#121212] border-t border-amber-500/30 px-4 py-3 flex justify-around items-center z-20">
-        <button onclick="navigateTo('home')" class="flex flex-col items-center text-amber-400 cursor-pointer">
-          <svg class="w-5 h-5 mb-0.5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-          </svg>
-          <span class="text-[10px] font-extrabold">Home</span>
-        </button>
-        <button onclick="navigateTo('wallet')" class="flex flex-col items-center text-stone-400 hover:text-amber-400 cursor-pointer">
-          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
-          </svg>
-          <span class="text-[10px] font-extrabold">Wallet</span>
-        </button>
-        <button onclick="navigateTo('redeemed')" class="flex flex-col items-center text-stone-400 hover:text-amber-400 cursor-pointer">
-          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-          </svg>
-          <span class="text-[10px] font-extrabold">Redeemed</span>
-        </button>
-        <button onclick="navigateTo('profile')" class="flex flex-col items-center text-stone-400 hover:text-amber-400 cursor-pointer">
-          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-          </svg>
-          <span class="text-[10px] font-extrabold">Profile</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- ==================== 4. WALLET SCREEN ==================== -->
-    <div id="screen-wallet" class="flex-1 hidden flex-col bg-[#FAF6ED] text-[#1A1A1A] relative overflow-hidden">
-      <!-- Header -->
-      <div class="bg-[#121212] text-white px-5 pt-6 pb-4 rounded-b-[30px] shadow-lg flex items-center justify-between">
-        <button onclick="navigateTo('home')" class="p-2 rounded-xl bg-stone-800 text-amber-400 cursor-pointer">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
-          </svg>
-        </button>
-        <h2 class="text-base font-black tracking-wider uppercase">My Wallet</h2>
-        <div class="w-9"></div>
-      </div>
-
-      <!-- Wallet Content -->
-      <div class="flex-1 overflow-y-auto p-5 pb-24 space-y-4">
-        <!-- Main Wallet Balance Card -->
-        <div class="bg-gradient-to-r from-[#1E190E] via-[#2F240C] to-[#1E190E] border border-amber-500/40 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
-          <div class="absolute -right-4 -bottom-4 text-amber-400/10 text-8xl font-black pointer-events-none">₹</div>
-          <p class="text-xs font-bold text-amber-300/80 uppercase tracking-widest">My Wallet</p>
-          <h1 id="walletBalanceDisplay" class="text-4xl font-black gold-text mt-2">₹750</h1>
-          <div class="mt-4 flex items-center gap-2 text-[11px] text-amber-200 font-bold bg-black/30 px-3 py-2 rounded-xl backdrop-blur-sm border border-amber-500/20">
-            <svg class="w-4 h-4 text-amber-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <span>Redeemable at KARTHIK Men's Wear Store</span>
-          </div>
-        </div>
-
-        <!-- Transaction History Section in Wallet -->
-        <div>
-          <h3 class="text-sm font-extrabold text-stone-900 mb-3 uppercase tracking-wider">Transaction History</h3>
-          <div id="walletTransactionListContainer" class="space-y-2.5">
-            <!-- Populated via JS -->
-          </div>
-        </div>
-      </div>
-
-      <!-- Bottom Nav Bar -->
-      <div class="absolute bottom-0 left-0 right-0 bg-[#121212] border-t border-amber-500/30 px-4 py-3 flex justify-around items-center z-20">
-        <button onclick="navigateTo('home')" class="flex flex-col items-center text-stone-400 hover:text-amber-400 cursor-pointer">
-          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-          </svg>
-          <span class="text-[10px] font-extrabold">Home</span>
-        </button>
-        <button onclick="navigateTo('wallet')" class="flex flex-col items-center text-amber-400 cursor-pointer">
-          <svg class="w-5 h-5 mb-0.5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M21 18v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h12a3 3 0 013 3v1h-9a2 2 0 00-2 2v8a2 2 0 002 2h9zm-9-2h10V8H12v8zm4-5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/>
-          </svg>
-          <span class="text-[10px] font-extrabold">Wallet</span>
-        </button>
-        <button onclick="navigateTo('redeemed')" class="flex flex-col items-center text-stone-400 hover:text-amber-400 cursor-pointer">
-          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-          </svg>
-          <span class="text-[10px] font-extrabold">Redeemed</span>
-        </button>
-        <button onclick="navigateTo('profile')" class="flex flex-col items-center text-stone-400 hover:text-amber-400 cursor-pointer">
-          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-          </svg>
-          <span class="text-[10px] font-extrabold">Profile</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- ==================== 5. REDEEMED TRANSACTIONS SCREEN ==================== -->
-    <div id="screen-redeemed" class="flex-1 hidden flex-col bg-[#FAF6ED] text-[#1A1A1A] relative overflow-hidden">
-      <!-- Header -->
-      <div class="bg-[#121212] text-white px-5 pt-6 pb-4 rounded-b-[30px] shadow-lg flex items-center justify-between">
-        <button onclick="navigateTo('home')" class="p-2 rounded-xl bg-stone-800 text-amber-400 cursor-pointer">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
-          </svg>
-        </button>
-        <h2 class="text-base font-black tracking-wider uppercase">Redeemed History</h2>
-        <div class="w-9"></div>
-      </div>
-
-      <!-- Redeemed List -->
-      <div class="flex-1 overflow-y-auto p-5 pb-24 space-y-3">
+      <div class="flex-1 overflow-y-auto px-5 pb-6 space-y-3">
         <div id="redeemedListContainer" class="space-y-3">
-          <!-- Dynamically populated via JS -->
+          <!-- Populated via JS -->
         </div>
       </div>
 
-      <!-- Bottom Nav Bar -->
-      <div class="absolute bottom-0 left-0 right-0 bg-[#121212] border-t border-amber-500/30 px-4 py-3 flex justify-around items-center z-20">
-        <button onclick="navigateTo('home')" class="flex flex-col items-center text-stone-400 hover:text-amber-400 cursor-pointer">
-          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-          </svg>
-          <span class="text-[10px] font-extrabold">Home</span>
-        </button>
-        <button onclick="navigateTo('wallet')" class="flex flex-col items-center text-stone-400 hover:text-amber-400 cursor-pointer">
-          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
-          </svg>
-          <span class="text-[10px] font-extrabold">Wallet</span>
-        </button>
-        <button onclick="navigateTo('redeemed')" class="flex flex-col items-center text-amber-400 cursor-pointer">
-          <svg class="w-5 h-5 mb-0.5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-          </svg>
-          <span class="text-[10px] font-extrabold">Redeemed</span>
-        </button>
-        <button onclick="navigateTo('profile')" class="flex flex-col items-center text-stone-400 hover:text-amber-400 cursor-pointer">
-          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-          </svg>
-          <span class="text-[10px] font-extrabold">Profile</span>
-        </button>
+      <!-- Bottom Navigation Tabs & Starting Footer -->
+      <div class="relative z-10 px-4 pt-2 pb-3 bg-[#05122b]/95 border-t border-blue-300/15">
+        <div class="grid grid-cols-3 gap-2 mb-2">
+          <button type="button" onclick="navigateTo('home')" class="py-2 px-2 rounded-xl bg-white/10 hover:bg-white/15 text-blue-100 font-bold text-xs border border-blue-300/20 cursor-pointer">
+            Home
+          </button>
+          <button type="button" onclick="navigateTo('wallet')" class="py-2 px-2 rounded-xl bg-white/10 hover:bg-white/15 text-amber-300 font-bold text-xs border border-amber-400/30 cursor-pointer">
+            Wallet
+          </button>
+          <button type="button" onclick="navigateTo('redeemed')" class="py-2 px-2 rounded-xl gold-btn text-[#091b3e] font-extrabold text-xs cursor-pointer">
+            Redeem
+          </button>
+        </div>
+        <p class="text-[10px] text-center text-blue-200/60">© 2026 KARTHIK Men's Wear. All rights reserved.</p>
       </div>
     </div>
 
-    <!-- ==================== 6. PROFILE SCREEN ==================== -->
-    <div id="screen-profile" class="flex-1 hidden flex-col bg-[#FAF6ED] text-[#1A1A1A] relative overflow-hidden">
-      <!-- Header -->
-      <div class="bg-[#121212] text-white px-5 pt-6 pb-4 rounded-b-[30px] shadow-lg flex items-center justify-between">
-        <button onclick="navigateTo('home')" class="p-2 rounded-xl bg-stone-800 text-amber-400 cursor-pointer">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+    <!-- ==================== 4. PROFILE SCREEN ==================== -->
+    <div id="screen-profile" class="flex-1 hidden flex-col relative z-10 overflow-hidden">
+      <div class="px-5 pt-6 pb-4 flex items-center justify-between">
+        <button onclick="navigateTo('home')" class="p-2 rounded-xl text-white hover:bg-white/10 cursor-pointer">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
           </svg>
         </button>
-        <h2 class="text-base font-black tracking-wider uppercase">Profile</h2>
-        <div class="w-9"></div>
+        <h2 class="text-lg font-extrabold tracking-wide text-white">Profile</h2>
+        <div class="w-10"></div>
       </div>
 
-      <!-- Profile Content -->
-      <div class="flex-1 overflow-y-auto p-5 pb-24 space-y-5">
-        <!-- User Details Card -->
-        <div class="bg-gradient-to-br from-[#1E190E] via-[#2F240C] to-[#1E190E] text-white rounded-3xl p-6 shadow-xl flex items-center justify-between border border-amber-500/40">
-          <div class="flex items-center gap-4">
-            <div class="w-16 h-16 rounded-2xl gold-gradient p-0.5 shadow-md flex items-center justify-center">
-              <div class="w-full h-full bg-[#121212] rounded-[14px] flex items-center justify-center text-amber-400">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                </svg>
-              </div>
+      <div class="flex-1 overflow-y-auto px-5 pb-20 space-y-4">
+        <!-- User Card -->
+        <div class="navy-glass-card rounded-3xl p-5 flex items-center justify-between">
+          <div class="flex items-center gap-3.5">
+            <div class="w-14 h-14 rounded-2xl gold-btn flex items-center justify-center text-[#091b3e] font-black text-xl">
+              <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
             </div>
             <div>
-              <h3 id="profileNameDisplay" class="text-lg font-black gold-text">Karthik Sai</h3>
-              <p id="profilePhoneDisplay" class="text-xs font-bold text-stone-300 mt-0.5">+91 98765 43210</p>
+              <h3 id="profileNameDisplay" class="text-base font-extrabold text-white">Karthik Sai</h3>
+              <p id="profilePhoneDisplay" class="text-xs font-semibold text-blue-200/80 mt-0.5">+91 9876543210</p>
             </div>
           </div>
-          <button onclick="openModal('editProfileModal')" class="bg-amber-400 hover:bg-amber-300 text-stone-950 font-extrabold text-xs px-3.5 py-2 rounded-xl shadow transition cursor-pointer flex items-center gap-1.5">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-            </svg>
-            <span>Edit</span>
+          <button onclick="openModal('editProfileModal')" class="gold-btn text-[#091b3e] font-extrabold text-xs px-3.5 py-2 rounded-xl cursor-pointer">
+            Edit
           </button>
         </div>
 
-        <!-- Menu Options -->
-        <div class="bg-white border border-amber-200 rounded-3xl overflow-hidden shadow-sm">
-          <button onclick="navigateTo('wallet')" class="w-full px-5 py-4 flex items-center justify-between hover:bg-stone-50 transition border-b border-stone-100 cursor-pointer">
-            <div class="flex items-center gap-3.5 text-stone-800">
-              <div class="w-9 h-9 rounded-xl bg-amber-100 flex items-center justify-center text-amber-800">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
-                </svg>
-              </div>
-              <span class="text-sm font-extrabold">My Wallet</span>
-            </div>
-            <svg class="w-5 h-5 text-stone-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <!-- Menu List -->
+        <div class="navy-glass-card rounded-3xl overflow-hidden divide-y divide-blue-300/15">
+          <button onclick="navigateTo('home')" class="w-full px-5 py-4 flex items-center justify-between hover:bg-white/5 transition cursor-pointer">
+            <span class="text-sm font-bold text-white">My Wallet</span>
+            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
             </svg>
           </button>
-
-          <button onclick="navigateTo('redeemed')" class="w-full px-5 py-4 flex items-center justify-between hover:bg-stone-50 transition border-b border-stone-100 cursor-pointer">
-            <div class="flex items-center gap-3.5 text-stone-800">
-              <div class="w-9 h-9 rounded-xl bg-amber-100 flex items-center justify-center text-amber-800">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                </svg>
-              </div>
-              <span class="text-sm font-extrabold">Redeemed History</span>
-            </div>
-            <svg class="w-5 h-5 text-stone-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <button onclick="navigateTo('redeemed')" class="w-full px-5 py-4 flex items-center justify-between hover:bg-white/5 transition cursor-pointer">
+            <span class="text-sm font-bold text-white">Redeemed History</span>
+            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
             </svg>
           </button>
-
-          <button onclick="showToast('KARTHIK Men\'s Wear v2.6 - All systems active')" class="w-full px-5 py-4 flex items-center justify-between hover:bg-stone-50 transition border-b border-stone-100 cursor-pointer">
-            <div class="flex items-center gap-3.5 text-stone-800">
-              <div class="w-9 h-9 rounded-xl bg-amber-100 flex items-center justify-center text-amber-800">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                </svg>
-              </div>
-              <span class="text-sm font-extrabold">Settings</span>
-            </div>
-            <svg class="w-5 h-5 text-stone-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <button onclick="showToast('Support: support@karthikmenswear.com')" class="w-full px-5 py-4 flex items-center justify-between hover:bg-white/5 transition cursor-pointer">
+            <span class="text-sm font-bold text-white">Help & Support</span>
+            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
             </svg>
           </button>
-
-          <button onclick="showToast('Contact Support: support@karthikmenswear.com')" class="w-full px-5 py-4 flex items-center justify-between hover:bg-stone-50 transition border-b border-stone-100 cursor-pointer">
-            <div class="flex items-center gap-3.5 text-stone-800">
-              <div class="w-9 h-9 rounded-xl bg-amber-100 flex items-center justify-center text-amber-800">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-              </div>
-              <span class="text-sm font-extrabold">Help & Support</span>
-            </div>
-            <svg class="w-5 h-5 text-stone-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-            </svg>
-          </button>
-
-          <button onclick="handleLogout()" class="w-full px-5 py-4 flex items-center justify-between hover:bg-red-50 transition cursor-pointer">
-            <div class="flex items-center gap-3.5 text-red-600">
-              <div class="w-9 h-9 rounded-xl bg-red-100 flex items-center justify-center text-red-600">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                </svg>
-              </div>
-              <span class="text-sm font-extrabold">Logout</span>
-            </div>
-            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+          <button onclick="handleLogout()" class="w-full px-5 py-4 flex items-center justify-between hover:bg-red-500/10 transition cursor-pointer">
+            <span class="text-sm font-bold text-red-400">Logout</span>
+            <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
             </svg>
           </button>
         </div>
-      </div>
-
-      <!-- Bottom Nav Bar -->
-      <div class="absolute bottom-0 left-0 right-0 bg-[#121212] border-t border-amber-500/30 px-4 py-3 flex justify-around items-center z-20">
-        <button onclick="navigateTo('home')" class="flex flex-col items-center text-stone-400 hover:text-amber-400 cursor-pointer">
-          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-          </svg>
-          <span class="text-[10px] font-extrabold">Home</span>
-        </button>
-        <button onclick="navigateTo('wallet')" class="flex flex-col items-center text-stone-400 hover:text-amber-400 cursor-pointer">
-          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
-          </svg>
-          <span class="text-[10px] font-extrabold">Wallet</span>
-        </button>
-        <button onclick="navigateTo('redeemed')" class="flex flex-col items-center text-stone-400 hover:text-amber-400 cursor-pointer">
-          <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-          </svg>
-          <span class="text-[10px] font-extrabold">Redeemed</span>
-        </button>
-        <button onclick="navigateTo('profile')" class="flex flex-col items-center text-amber-400 cursor-pointer">
-          <svg class="w-5 h-5 mb-0.5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-          </svg>
-          <span class="text-[10px] font-extrabold">Profile</span>
-        </button>
       </div>
     </div>
 
     <!-- ==================== SIDEBAR / DRAWER ==================== -->
-    <div id="sidebarOverlay" onclick="toggleSidebar(false)" class="absolute inset-0 bg-black/70 backdrop-blur-sm z-40 hidden transition-opacity duration-300 opacity-0"></div>
-    <div id="sidebarDrawer" class="absolute top-0 bottom-0 left-0 w-72 bg-[#121212] text-white z-50 transform -translate-x-full transition-transform duration-300 p-6 flex flex-col justify-between shadow-2xl border-r border-amber-500/30">
+    <div id="sidebarOverlay" onclick="toggleSidebar(false)" class="absolute inset-0 bg-black/70 backdrop-blur-xs z-40 hidden transition-opacity duration-300 opacity-0"></div>
+    <div id="sidebarDrawer" class="absolute top-0 bottom-0 left-0 w-72 bg-[#061533] text-white z-50 transform -translate-x-full transition-transform duration-300 p-6 flex flex-col justify-between shadow-2xl border-r border-blue-400/20">
       <div>
-        <div class="flex items-center justify-between pb-6 border-b border-stone-800">
-          <div class="flex items-center gap-2.5">
-            <div class="w-10 h-10 gold-gradient rounded-xl p-0.5 flex items-center justify-center">
-              <div class="w-full h-full bg-[#121212] rounded-[10px] flex items-center justify-center text-amber-400 font-black">K</div>
-            </div>
-            <div>
-              <h3 class="text-base font-black gold-text uppercase leading-none">KARTHIK</h3>
-              <p class="text-[8px] font-extrabold text-amber-400 tracking-wider uppercase">Men's Wear</p>
-            </div>
+        <div class="flex items-center justify-between pb-5 border-b border-blue-300/15">
+          <div>
+            <h3 class="text-lg font-black gold-text uppercase leading-none">KARTHIK</h3>
+            <p class="text-[9px] font-bold text-amber-300 tracking-widest uppercase mt-1">Men's Wear</p>
           </div>
-          <button onclick="toggleSidebar(false)" class="text-stone-400 hover:text-white p-2 cursor-pointer">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-          </button>
+          <button onclick="toggleSidebar(false)" class="text-blue-200 hover:text-white p-1.5 cursor-pointer">✕</button>
         </div>
 
-        <div class="py-6 space-y-2">
-          <button onclick="toggleSidebar(false); navigateTo('home')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-stone-800 text-stone-200 font-bold text-sm transition cursor-pointer">
-            <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-            </svg>
-            <span>Home</span>
+        <div class="py-5 space-y-2">
+          <button onclick="toggleSidebar(false); navigateTo('home')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-white/10 text-white font-bold text-sm transition cursor-pointer">
+            <span>Wallet & Scan</span>
           </button>
-          <button onclick="toggleSidebar(false); navigateTo('wallet')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-stone-800 text-stone-200 font-bold text-sm transition cursor-pointer">
-            <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
-            </svg>
-            <span>My Wallet</span>
-          </button>
-          <button onclick="toggleSidebar(false); navigateTo('redeemed')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-stone-800 text-stone-200 font-bold text-sm transition cursor-pointer">
-            <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-            </svg>
+          <button onclick="toggleSidebar(false); navigateTo('redeemed')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-white/10 text-white font-bold text-sm transition cursor-pointer">
             <span>Redeemed History</span>
           </button>
-          <button onclick="toggleSidebar(false); navigateTo('profile')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-stone-800 text-stone-200 font-bold text-sm transition cursor-pointer">
-            <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-            </svg>
+          <button onclick="toggleSidebar(false); navigateTo('profile')" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-white/10 text-white font-bold text-sm transition cursor-pointer">
             <span>Profile</span>
+          </button>
+          <button onclick="toggleSidebar(false); handleLogout()" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-red-500/15 text-red-400 font-bold text-sm transition cursor-pointer">
+            <span>Logout</span>
           </button>
         </div>
       </div>
 
-      <!-- Bottom Sidebar Footer -->
-      <div class="pt-4 border-t border-stone-800 text-center">
-        <p class="text-[11px] text-stone-500">KARTHIK Men's Wear App v2.6</p>
+      <div class="pt-4 border-t border-blue-300/15 text-center">
+        <p class="text-[11px] text-blue-200/50">KARTHIK Men's Wear App v3.0</p>
       </div>
     </div>
 
     <!-- ==================== MODALS ==================== -->
 
+    <!-- Full-Screen Scan Coupon View (Matching Image Screen 3) -->
+    <div id="scannerModal" class="fixed inset-0 z-50 hidden flex flex-col bg-[#1b1610] text-white">
+      <!-- Top Navy Header Bar -->
+      <div class="bg-[#07193d] px-5 pt-6 pb-4 flex items-center justify-between shadow-lg">
+        <button type="button" onclick="closeScannerModal()" class="p-2 rounded-xl text-white hover:bg-white/10 cursor-pointer">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+        </button>
+        <h3 class="text-lg font-extrabold tracking-wide text-white">Scan Coupon</h3>
+        <div class="w-10"></div>
+      </div>
+
+      <!-- Camera Viewfinder Container -->
+      <div class="flex-1 relative flex flex-col items-center justify-center p-6 overflow-hidden">
+        <div class="relative w-full max-w-[300px] aspect-square flex items-center justify-center">
+          <!-- Live HTML5 QR Camera Feed -->
+          <div id="qrReader" class="w-full h-full rounded-3xl overflow-hidden bg-black/80"></div>
+
+          <!-- White Rounded Viewfinder Corner Brackets (Matching Screen 3) -->
+          <div class="pointer-events-none absolute -inset-2">
+            <div class="absolute top-0 left-0 w-11 h-11 border-t-4 border-l-4 border-white rounded-tl-3xl"></div>
+            <div class="absolute top-0 right-0 w-11 h-11 border-t-4 border-r-4 border-white rounded-tr-3xl"></div>
+            <div class="absolute bottom-0 left-0 w-11 h-11 border-b-4 border-l-4 border-white rounded-bl-3xl"></div>
+            <div class="absolute bottom-0 right-0 w-11 h-11 border-b-4 border-r-4 border-white rounded-br-3xl"></div>
+          </div>
+        </div>
+
+        <!-- Bottom Instruction Pill (Matching Screen 3) -->
+        <div class="mt-10 bg-black/75 border border-white/15 backdrop-blur-md px-6 py-3.5 rounded-2xl flex items-center gap-3.5 shadow-xl">
+          <svg class="w-7 h-7 text-white shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 7V5a2 2 0 012-2h2m10 0h2a2 2 0 012 2v2m0 10v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2M7 12h10"/>
+          </svg>
+          <div class="text-left">
+            <p class="text-xs font-bold text-white leading-snug">Scan the QR Code</p>
+            <p class="text-xs font-medium text-stone-300 leading-snug">on your coupon</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Edit Profile Modal -->
     <div id="editProfileModal" class="modal-backdrop fixed inset-0 z-50 hidden flex items-center justify-center p-4">
-      <div class="bg-[#181818] border border-amber-500/40 rounded-3xl p-6 w-full max-w-xs text-white shadow-2xl relative">
+      <div class="navy-glass-card rounded-3xl p-6 w-full max-w-xs text-white shadow-2xl">
         <h3 class="text-base font-black gold-text mb-4">Edit Profile</h3>
         <div class="space-y-3">
           <div>
-            <label class="block text-[11px] font-bold text-stone-400 mb-1 uppercase">Full Name</label>
-            <input id="editNameInput" type="text" class="w-full cream-input rounded-xl px-3 py-2 text-xs font-bold focus:outline-none" />
+            <label class="block text-[11px] font-bold text-blue-200 mb-1 uppercase">Full Name</label>
+            <input id="editNameInput" type="text" class="w-full white-pill-input rounded-xl px-3.5 py-2.5 text-xs font-bold focus:outline-none" />
           </div>
-          <button type="button" onclick="saveProfileChanges()" class="w-full gold-gradient text-stone-950 font-black py-2.5 rounded-xl text-xs mt-2 shadow transition cursor-pointer">Save Changes</button>
-          <button type="button" onclick="closeModal('editProfileModal')" class="w-full bg-stone-800 text-stone-300 font-bold py-2 rounded-xl text-xs hover:bg-stone-700 transition cursor-pointer">Cancel</button>
+          <button type="button" onclick="saveProfileChanges()" class="w-full gold-btn text-[#091b3e] font-extrabold py-2.5 rounded-xl text-xs mt-2 cursor-pointer">Save Changes</button>
+          <button type="button" onclick="closeModal('editProfileModal')" class="w-full bg-white/10 text-blue-100 font-bold py-2 rounded-xl text-xs hover:bg-white/20 cursor-pointer">Cancel</button>
         </div>
       </div>
     </div>
 
     <!-- Register Modal -->
     <div id="registerModal" class="modal-backdrop fixed inset-0 z-50 hidden flex items-center justify-center p-4">
-      <div class="bg-[#181818] border border-amber-500/40 rounded-3xl p-6 w-full max-w-xs text-white shadow-2xl relative">
+      <div class="navy-glass-card rounded-3xl p-6 w-full max-w-xs text-white shadow-2xl">
         <h3 class="text-base font-black gold-text mb-1">Create Account</h3>
-        <p class="text-xs text-stone-400 mb-4">Enter your details to register</p>
+        <p class="text-xs text-blue-200/80 mb-4">Get ₹5 instant Welcome Bonus!</p>
         <div class="space-y-3">
           <div>
-            <label class="block text-[11px] font-bold text-stone-400 mb-1 uppercase">Full Name</label>
-            <input id="regName" type="text" placeholder="Enter Full Name" class="w-full cream-input rounded-xl px-3 py-2 text-xs font-bold focus:outline-none" />
+            <label class="block text-[11px] font-bold text-blue-200 mb-1 uppercase">Full Name</label>
+            <input id="regName" type="text" placeholder="Enter Full Name" class="w-full white-pill-input rounded-xl px-3.5 py-2.5 text-xs font-bold focus:outline-none" />
           </div>
           <div>
-            <label class="block text-[11px] font-bold text-stone-400 mb-1 uppercase">Mobile Number</label>
-            <div class="cream-input rounded-xl px-3 py-2 flex items-center gap-2">
-              <span class="text-xs font-bold text-stone-600 border-r border-amber-300 pr-2">+91</span>
-              <input id="regPhone" type="tel" maxlength="10" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)" placeholder="10-digit number" class="w-full bg-transparent text-xs font-bold focus:outline-none" />
+            <label class="block text-[11px] font-bold text-blue-200 mb-1 uppercase">Mobile Number</label>
+            <div class="white-pill-input rounded-xl px-3.5 py-2.5 flex items-center gap-2">
+              <span class="text-xs font-bold text-slate-500 border-r border-slate-300 pr-2">+91</span>
+              <input id="regPhone" type="tel" maxlength="10" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)" placeholder="10-digit number" class="w-full bg-transparent text-xs font-bold text-slate-900 focus:outline-none" />
             </div>
           </div>
           <div>
-            <label class="block text-[11px] font-bold text-stone-400 mb-1 uppercase">Password</label>
-            <input id="regPassword" type="password" placeholder="Create password (min 4 chars)" class="w-full cream-input rounded-xl px-3 py-2 text-xs font-bold focus:outline-none" />
+            <label class="block text-[11px] font-bold text-blue-200 mb-1 uppercase">Password</label>
+            <input id="regPassword" type="password" placeholder="Create password (min 4 chars)" class="w-full white-pill-input rounded-xl px-3.5 py-2.5 text-xs font-bold focus:outline-none" />
           </div>
-          <button type="button" onclick="handleRegister()" class="w-full gold-gradient text-stone-950 font-black py-3 rounded-xl text-xs mt-2 shadow transition cursor-pointer">Register & Login</button>
-          <button type="button" onclick="closeModal('registerModal')" class="w-full bg-stone-800 text-stone-300 font-bold py-2 rounded-xl text-xs hover:bg-stone-700 transition cursor-pointer">Cancel</button>
+          <button type="button" onclick="handleRegister()" class="w-full gold-btn text-[#091b3e] font-extrabold py-3 rounded-xl text-xs mt-2 cursor-pointer">Register & Login</button>
+          <button type="button" onclick="closeModal('registerModal')" class="w-full bg-white/10 text-blue-100 font-bold py-2 rounded-xl text-xs hover:bg-white/20 cursor-pointer">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Coupon QR Display & Download Modal -->
+    <div id="qrDisplayModal" class="modal-backdrop fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+      <div class="bg-white border border-amber-300 rounded-3xl p-6 w-full max-w-xs text-slate-900 shadow-2xl text-center">
+        <span class="inline-block bg-green-100 text-green-800 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase mb-1">QR Code Ready</span>
+        <h3 id="qrModalCodeTitle" class="text-lg font-black text-slate-900 uppercase">KMW-12345</h3>
+        <p id="qrModalAmountText" class="text-sm font-black text-amber-700 mb-3">Reward: ₹100</p>
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col items-center justify-center mb-4">
+          <div id="qrCodeCanvasBox" class="bg-white p-2.5 rounded-xl shadow-xs flex items-center justify-center"></div>
+        </div>
+        <p class="text-[11px] text-slate-500 mb-4">Download this QR card image and print it directly on your store coupons.</p>
+        <div class="space-y-2">
+          <button type="button" onclick="downloadCouponQR()" class="w-full gold-btn text-[#091b3e] font-extrabold py-3 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+            <span>Download QR Image</span>
+          </button>
+          <button type="button" onclick="closeModal('qrDisplayModal')" class="w-full bg-[#07193d] text-amber-300 font-extrabold py-2.5 rounded-xl text-xs cursor-pointer">Done</button>
         </div>
       </div>
     </div>
 
     <!-- Admin Panel Modal (Full Screen) -->
-    <div id="adminModal" class="fixed inset-0 z-50 hidden flex flex-col bg-[#FAF6ED] text-[#1A1A1A] overflow-y-auto">
+    <div id="adminModal" class="fixed inset-0 z-50 hidden flex flex-col navy-bg text-white overflow-y-auto">
       <div class="w-full max-w-2xl mx-auto p-5 sm:p-8 flex-1 flex flex-col">
-        <div class="flex items-center justify-between pb-4 border-b border-amber-200 mb-6">
+        <div class="flex items-center justify-between pb-4 border-b border-blue-300/20 mb-6">
           <div>
-            <h3 class="text-xl font-black text-stone-900 uppercase">KARTHIK Admin Panel</h3>
-            <p class="text-xs font-bold text-amber-700">Manage Coupons & User Balances</p>
+            <h3 class="text-xl font-black gold-text uppercase">KARTHIK Admin Panel</h3>
+            <p class="text-xs font-semibold text-blue-200/80">Generate QR Coupons & Redeem Balances</p>
           </div>
-          <button type="button" onclick="closeModal('adminModal')" class="bg-stone-200 hover:bg-stone-300 text-stone-800 font-extrabold text-xs px-4 py-2 rounded-xl transition cursor-pointer">✕ Close</button>
+          <button type="button" onclick="closeModal('adminModal')" class="bg-white/10 hover:bg-white/20 text-white font-extrabold text-xs px-4 py-2 rounded-xl transition cursor-pointer">✕ Close</button>
         </div>
 
-        <div id="adminPinGate" class="space-y-4 my-auto max-w-sm mx-auto w-full bg-white p-6 rounded-3xl border border-amber-200 shadow-sm">
-          <label class="block text-sm font-extrabold text-stone-800">Enter Admin PIN (Default: 1234)</label>
-          <input id="adminPinInput" type="password" maxlength="4" placeholder="PIN" class="w-full cream-input rounded-xl px-4 py-3 text-sm font-extrabold focus:outline-none" />
-          <button type="button" onclick="verifyAdminPin()" class="w-full bg-[#121212] hover:bg-black text-amber-400 font-extrabold py-3 rounded-xl text-sm shadow transition cursor-pointer">Unlock Admin Panel</button>
+        <div id="adminPinGate" class="space-y-4 my-auto max-w-sm mx-auto w-full navy-glass-card p-6 rounded-3xl">
+          <label class="block text-sm font-extrabold text-white">Enter Admin PIN (Default: 1234)</label>
+          <input id="adminPinInput" type="password" maxlength="4" placeholder="PIN" class="w-full white-pill-input rounded-xl px-4 py-3 text-sm font-extrabold focus:outline-none" />
+          <button type="button" onclick="verifyAdminPin()" class="w-full gold-btn text-[#091b3e] font-extrabold py-3 rounded-xl text-sm transition cursor-pointer">Unlock Admin Panel</button>
         </div>
 
         <div id="adminContent" class="space-y-6 hidden">
-          <!-- 1. Add Custom Coupon Code = Points -->
-          <div class="p-5 rounded-3xl bg-white border border-amber-200 shadow-sm space-y-3">
-            <label class="text-sm font-extrabold text-stone-800 block">1. Add Custom Coupon Code = Amount (₹)</label>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <input id="adminCouponKey" type="text" placeholder="Coupon Name (e.g. KARTHIK500)" class="w-full cream-input rounded-xl px-4 py-3 text-xs font-extrabold uppercase focus:outline-none" />
-              <input id="adminCouponVal" type="number" placeholder="Amount (e.g. 500)" class="w-full cream-input rounded-xl px-4 py-3 text-xs font-extrabold focus:outline-none" />
-            </div>
-            <button type="button" onclick="adminAddCoupon()" class="w-full bg-amber-600 hover:bg-amber-700 text-white rounded-xl py-3 text-xs font-extrabold transition cursor-pointer">Add / Update Coupon</button>
+          <!-- 1. Amount Only -> Auto Generate Unique QR Code -->
+          <div class="p-5 rounded-3xl navy-glass-card space-y-3">
+            <label class="text-sm font-extrabold text-amber-300 block">1. Enter Coupon Amount (₹) to Generate QR</label>
+            <input id="adminCouponVal" type="number" min="1" placeholder="Enter Amount (e.g. 500)" class="w-full white-pill-input rounded-xl px-4 py-3 text-sm font-extrabold focus:outline-none" />
+            <button type="button" onclick="adminAddCoupon()" class="w-full gold-btn text-[#091b3e] rounded-xl py-3 text-xs font-extrabold transition cursor-pointer">Generate QR Code</button>
             <div id="adminCouponList" class="space-y-2 max-h-60 overflow-y-auto pt-2"></div>
           </div>
 
           <!-- 2. Admin Redeem User Wallet -->
-          <div class="p-5 rounded-3xl bg-white border border-red-200 shadow-sm space-y-3">
-            <label class="text-sm font-extrabold text-stone-800 block">2. Redeem User Balance (Admin Only)</label>
+          <div class="p-5 rounded-3xl navy-glass-card border-red-400/30 space-y-3">
+            <label class="text-sm font-extrabold text-red-300 block">2. Redeem User Balance (Admin Only)</label>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div class="cream-input rounded-xl px-4 py-3 flex items-center gap-2">
-                <span class="text-xs font-bold text-stone-500 border-r border-amber-300 pr-2">+91</span>
-                <input id="adminRedeemPhone" type="tel" maxlength="10" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)" placeholder="10-Digit Mobile Number" class="w-full bg-transparent text-xs font-bold focus:outline-none" />
+              <div class="white-pill-input rounded-xl px-4 py-3 flex items-center gap-2">
+                <span class="text-xs font-bold text-slate-500 border-r border-slate-300 pr-2">+91</span>
+                <input id="adminRedeemPhone" type="tel" maxlength="10" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)" placeholder="10-Digit Mobile Number" class="w-full bg-transparent text-xs font-bold text-slate-900 focus:outline-none" />
               </div>
-              <input id="adminRedeemAmount" type="number" min="1" placeholder="Enter Redeem Amount (₹)" class="w-full cream-input rounded-xl px-4 py-3 text-xs font-extrabold focus:outline-none" />
+              <input id="adminRedeemAmount" type="number" min="1" placeholder="Enter Redeem Amount (₹)" class="w-full white-pill-input rounded-xl px-4 py-3 text-xs font-extrabold focus:outline-none" />
             </div>
             <button type="button" onclick="adminRedeemUserBalance()" class="w-full bg-red-600 hover:bg-red-700 text-white rounded-xl py-3 font-extrabold text-xs transition cursor-pointer">Redeem Amount from User</button>
           </div>
@@ -601,7 +571,6 @@
       appId: "YOUR_APP_ID"
     };
 
-    // Initialize Firebase Realtime Database safely
     let db = null;
     let isFirebaseReady = false;
     try {
@@ -627,8 +596,7 @@
         name: 'Karthik Sai',
         phone: '+91 9876543210'
       },
-      homePoints: 250,
-      walletPoints: 750,
+      walletPoints: 0,
       transactions: []
     };
 
@@ -636,7 +604,6 @@
     function setupRealtimeListeners() {
       if (!isFirebaseReady || !db) return;
 
-      // Real-time listener for all Users (Accounts, Balances & Transactions)
       db.ref('users').on('value', (snapshot) => {
         const usersObj = snapshot.val() || {};
         const accountsList = Object.values(usersObj).map(u => ({
@@ -646,11 +613,9 @@
         state.registeredAccounts = accountsList;
         localStorage.setItem('karthik_registered_accounts', JSON.stringify(accountsList));
 
-        // If a user is currently logged in, update their balance & history in real-time
         if (state.activePhone && usersObj[state.activePhone]) {
           const liveUser = usersObj[state.activePhone];
           state.user.name = liveUser.name;
-          state.homePoints = typeof liveUser.homePoints === 'number' ? liveUser.homePoints : 0;
           state.walletPoints = typeof liveUser.walletPoints === 'number' ? liveUser.walletPoints : 0;
           state.transactions = Array.isArray(liveUser.transactions)
             ? liveUser.transactions
@@ -659,7 +624,6 @@
         }
       });
 
-      // Real-time listener for Custom Coupons
       db.ref('coupons').on('value', (snapshot) => {
         const couponsObj = snapshot.val();
         if (couponsObj) {
@@ -671,7 +635,6 @@
         renderAdminCouponList();
       });
 
-      // Real-time listener for Used Coupons
       db.ref('usedCoupons').on('value', (snapshot) => {
         const usedObj = snapshot.val() || {};
         state.usedCoupons = Object.keys(usedObj);
@@ -686,7 +649,7 @@
         name: state.user.name,
         phone: state.activePhone,
         password: idx !== -1 ? state.registeredAccounts[idx].password : '',
-        homePoints: state.homePoints,
+        homePoints: state.walletPoints,
         walletPoints: state.walletPoints,
         transactions: state.transactions
       };
@@ -699,7 +662,7 @@
       if (isFirebaseReady && db) {
         db.ref('users/' + state.activePhone).update({
           name: updatedUserData.name,
-          homePoints: updatedUserData.homePoints,
+          homePoints: updatedUserData.walletPoints,
           walletPoints: updatedUserData.walletPoints,
           transactions: updatedUserData.transactions
         });
@@ -742,52 +705,51 @@
 
     function updateUI() {
       const homePts = document.getElementById('homePointsDisplay');
-      const walletBal = document.getElementById('walletBalanceDisplay');
+      const walletBal = document.getElementById('walletDetailBalance');
       const profName = document.getElementById('profileNameDisplay');
       const profPhone = document.getElementById('profilePhoneDisplay');
 
-      if (homePts) homePts.textContent = `₹${state.homePoints}`;
-      if (walletBal) walletBal.textContent = `₹${state.walletPoints}`;
+      const formattedBal = `₹ ${Number(state.walletPoints || 0).toFixed(2)}`;
+      if (homePts) homePts.textContent = formattedBal;
+      if (walletBal) walletBal.textContent = formattedBal;
       if (profName) profName.textContent = state.user.name;
       if (profPhone) profPhone.textContent = state.user.phone;
 
-      // Render Wallet Transaction History
-      const walletList = document.getElementById('walletTransactionListContainer');
-      if (walletList) {
-        if (!state.transactions || state.transactions.length === 0) {
-          walletList.innerHTML = `<p class="text-xs text-stone-500 text-center py-6 bg-white rounded-2xl border border-amber-100">No transactions yet.</p>`;
+      const allTx = Array.isArray(state.transactions) ? state.transactions : [];
+      const creditTx = allTx.filter(tx => tx.type === 'credit');
+
+      // Render Credited Amounts (+) in Wallet Screen
+      const walletCreditList = document.getElementById('walletCreditListContainer');
+      if (walletCreditList) {
+        if (creditTx.length === 0) {
+          walletCreditList.innerHTML = `<p class="text-xs text-blue-200/70 text-center py-4 navy-glass-card rounded-2xl">No credited amounts yet.</p>`;
         } else {
-          walletList.innerHTML = state.transactions.map(tx => {
-            const isCredit = tx.type === 'credit';
-            return `
-              <div class="bg-white border border-amber-200/80 rounded-2xl p-3.5 flex items-center justify-between shadow-sm">
-                <div>
-                  <p class="text-xs font-extrabold text-stone-900">${tx.title}</p>
-                  <p class="text-[10px] text-stone-500 mt-0.5">${tx.date}</p>
-                </div>
-                <span class="text-sm font-black ${isCredit ? 'text-green-600' : 'text-red-600'}">
-                  ${isCredit ? '+' : '-'}₹${tx.points}
-                </span>
+          walletCreditList.innerHTML = creditTx.map(tx => `
+            <div class="navy-glass-card rounded-2xl p-3.5 flex items-center justify-between">
+              <div>
+                <p class="text-xs font-extrabold text-white">${tx.title}</p>
+                <p class="text-[10px] text-blue-200/70 mt-0.5">${tx.date}</p>
               </div>
-            `;
-          }).join('');
+              <span class="text-sm font-black text-emerald-400">+₹${tx.points}</span>
+            </div>
+          `).join('');
         }
       }
 
       // Render Redeemed History
       const redeemedList = document.getElementById('redeemedListContainer');
       if (redeemedList) {
-        const debits = (state.transactions || []).filter(tx => tx.type === 'debit');
+        const debits = allTx.filter(tx => tx.type === 'debit');
         if (debits.length === 0) {
-          redeemedList.innerHTML = `<p class="text-xs text-stone-500 text-center py-8 bg-white rounded-2xl border border-amber-100">No redeemed transactions yet.</p>`;
+          redeemedList.innerHTML = `<p class="text-xs text-blue-200/70 text-center py-8 navy-glass-card rounded-2xl">No redeemed transactions yet.</p>`;
         } else {
           redeemedList.innerHTML = debits.map(tx => `
-            <div class="bg-white border border-amber-200/80 rounded-2xl p-4 flex items-center justify-between shadow-sm">
+            <div class="navy-glass-card rounded-2xl p-4 flex items-center justify-between">
               <div>
-                <p class="text-xs font-extrabold text-stone-900">${tx.title}</p>
-                <p class="text-[10px] text-stone-500 mt-0.5">${tx.date}</p>
+                <p class="text-xs font-extrabold text-white">${tx.title}</p>
+                <p class="text-[10px] text-blue-200/70 mt-0.5">${tx.date}</p>
               </div>
-              <span class="text-sm font-black text-red-600">-₹${tx.points}</span>
+              <span class="text-sm font-black text-rose-400">-₹${tx.points}</span>
             </div>
           `).join('');
         }
@@ -860,7 +822,6 @@
       state.activePhone = account.phone;
       state.user.name = account.name;
       state.user.phone = `+91 ${account.phone}`;
-      state.homePoints = typeof account.homePoints === 'number' ? account.homePoints : 0;
       state.walletPoints = typeof account.walletPoints === 'number' ? account.walletPoints : 0;
       state.transactions = Array.isArray(account.transactions) ? account.transactions : [];
       showToast(`Welcome back, ${account.name}!`);
@@ -959,22 +920,21 @@
     }
 
     // ==================== COUPON SYSTEM ====================
-    function applyCoupon() {
+    function applyCoupon(scannedCodeOverride = '') {
       const input = document.getElementById('couponCodeInput');
-      const code = input.value.trim().toUpperCase();
-      if (!code) {
-        showToast('Please enter a coupon code!');
+      const code = (scannedCodeOverride || (input ? input.value : '') || '').trim().toUpperCase();
+      if (!code || Object.keys(state.customCoupons || {}).length === 0) {
+        showToast('Scan coupons unavailable');
         return;
       }
 
       if (state.usedCoupons.includes(code)) {
-        showToast('This coupon has already been used!');
+        showToast('Scan coupons unavailable');
         return;
       }
 
       if (state.customCoupons[code] !== undefined) {
         const reward = state.customCoupons[code];
-        state.homePoints += reward;
         state.walletPoints += reward;
         state.usedCoupons.push(code);
         localStorage.setItem('karthik_used_coupons', JSON.stringify(state.usedCoupons));
@@ -996,11 +956,11 @@
         });
 
         syncUserStorage();
-        input.value = '';
-        showToast(`Coupon applied! ₹${reward} added to wallet.`);
+        if (input) input.value = '';
+        showToast(`Coupon applied! +₹${reward} credited to wallet.`);
         updateUI();
       } else {
-        showToast('Invalid or expired coupon code!');
+        showToast('Scan coupons unavailable');
       }
     }
 
@@ -1017,21 +977,24 @@
     }
 
     function adminAddCoupon() {
-      const key = document.getElementById('adminCouponKey').value.trim().toUpperCase();
       const val = parseInt(document.getElementById('adminCouponVal').value, 10);
-      if (!key || isNaN(val) || val <= 0) {
-        showToast('Enter valid coupon code and amount!');
+      if (isNaN(val) || val <= 0) {
+        showToast('Please enter a valid amount (₹)!');
         return;
       }
+      // Auto-generate unique coupon code based on amount
+      const randomDigits = Math.floor(10000 + Math.random() * 90000);
+      const key = `KMW-${val}-${randomDigits}`;
+
       state.customCoupons[key] = val;
       localStorage.setItem('karthik_custom_coupons', JSON.stringify(state.customCoupons));
       if (isFirebaseReady && db) {
         db.ref('coupons/' + key).set(val);
       }
-      document.getElementById('adminCouponKey').value = '';
       document.getElementById('adminCouponVal').value = '';
       renderAdminCouponList();
-      showToast(`Coupon ${key} = ₹${val} added!`);
+      showToast(`QR Code generated for ₹${val}!`);
+      showCouponQR(key, val);
     }
 
     function renderAdminCouponList() {
@@ -1039,15 +1002,148 @@
       if (!listContainer) return;
       const entries = Object.entries(state.customCoupons);
       if (entries.length === 0) {
-        listContainer.innerHTML = `<p class="text-[10px] text-stone-500">No active custom coupons.</p>`;
+        listContainer.innerHTML = `<p class="text-[11px] text-blue-200/60">No active generated QR coupons.</p>`;
         return;
       }
       listContainer.innerHTML = entries.map(([k, v]) => `
-        <div class="flex items-center justify-between bg-white px-3 py-1.5 rounded-xl border border-amber-200 text-xs">
-          <span class="font-bold text-stone-800">${k} : ₹${v}</span>
-          <button onclick="adminRemoveCoupon('${k}')" class="text-red-500 font-bold hover:text-red-700 cursor-pointer">Delete</button>
+        <div class="flex items-center justify-between bg-white/10 px-3.5 py-2.5 rounded-xl border border-blue-300/20 text-xs">
+          <span class="font-bold text-white">${k} : <strong class="text-amber-300">₹${v}</strong></span>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="showCouponQR('${k}', ${v})" class="bg-amber-400 text-[#091b3e] px-2.5 py-1 rounded-lg font-extrabold hover:bg-amber-300 cursor-pointer">QR & Download</button>
+            <button type="button" onclick="adminRemoveCoupon('${k}')" class="text-rose-400 font-bold hover:text-rose-300 cursor-pointer">Delete</button>
+          </div>
         </div>
       `).join('');
+    }
+
+    let currentQrCoupon = { code: '', amount: 0 };
+
+    function showCouponQR(code, amount) {
+      currentQrCoupon = { code, amount };
+      document.getElementById('qrModalCodeTitle').textContent = code;
+      document.getElementById('qrModalAmountText').textContent = `Reward: ₹${amount}`;
+      
+      const box = document.getElementById('qrCodeCanvasBox');
+      box.innerHTML = '';
+      if (typeof QRCode !== 'undefined') {
+        new QRCode(box, {
+          text: code,
+          width: 170,
+          height: 170,
+          colorDark: "#07193d",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      }
+      openModal('qrDisplayModal');
+    }
+
+    function downloadCouponQR() {
+      const box = document.getElementById('qrCodeCanvasBox');
+      const qrCanvas = box.querySelector('canvas');
+      const qrImg = box.querySelector('img');
+      const source = qrCanvas || qrImg;
+
+      if (!source) {
+        showToast('QR Code not ready yet!');
+        return;
+      }
+
+      const card = document.createElement('canvas');
+      card.width = 400;
+      card.height = 500;
+      const ctx = card.getContext('2d');
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, card.width, card.height);
+      ctx.strokeStyle = '#07193d';
+      ctx.lineWidth = 10;
+      ctx.strokeRect(12, 12, card.width - 24, card.height - 24);
+
+      ctx.fillStyle = '#07193d';
+      ctx.font = 'bold 26px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText("KARTHIK MEN'S WEAR", card.width / 2, 62);
+
+      ctx.fillStyle = '#d99116';
+      ctx.font = 'bold 14px Inter, sans-serif';
+      ctx.fillText('SCAN TO CLAIM REWARD', card.width / 2, 86);
+
+      ctx.drawImage(source, 95, 110, 210, 210);
+
+      ctx.fillStyle = '#07193d';
+      ctx.font = '900 36px Inter, sans-serif';
+      ctx.fillText(`₹${currentQrCoupon.amount}`, card.width / 2, 375);
+
+      ctx.fillStyle = '#475569';
+      ctx.font = 'bold 16px Inter, sans-serif';
+      ctx.fillText(`CODE: ${currentQrCoupon.code}`, card.width / 2, 415);
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillText('Scan in KARTHIK App to add to Wallet', card.width / 2, 452);
+
+      const link = document.createElement('a');
+      link.download = `${currentQrCoupon.code}_Rs${currentQrCoupon.amount}_QR.png`;
+      link.href = card.toDataURL('image/png');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast('Coupon QR Image Downloaded!');
+    }
+
+    // ==================== QR & BARCODE SCANNER ====================
+    let html5QrScanner = null;
+
+    function openScannerModal() {
+      if (!state.customCoupons || Object.keys(state.customCoupons).length === 0) {
+        showToast('Scan coupons unavailable');
+        return;
+      }
+      openModal('scannerModal');
+      if (typeof Html5Qrcode === 'undefined') {
+        showToast('Scan coupons unavailable');
+        closeScannerModal();
+        return;
+      }
+      html5QrScanner = new Html5Qrcode("qrReader");
+      html5QrScanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: { width: 220, height: 220 } },
+        (decodedText) => {
+          const scannedCode = decodedText.trim().toUpperCase();
+          closeScannerModal();
+          applyCoupon(scannedCode);
+        },
+        () => {}
+      ).catch(() => {
+        showToast('Scan coupons unavailable');
+        closeScannerModal();
+      });
+    }
+
+    function closeScannerModal() {
+      // Immediately hide scanner modal so back button always works
+      closeModal('scannerModal');
+
+      if (html5QrScanner) {
+        const scannerInstance = html5QrScanner;
+        html5QrScanner = null;
+        try {
+          const stopPromise = scannerInstance.stop();
+          if (stopPromise && typeof stopPromise.then === 'function') {
+            stopPromise.then(() => {
+              try { scannerInstance.clear(); } catch (e) {}
+            }).catch(() => {
+              try { scannerInstance.clear(); } catch (e) {}
+            });
+          } else {
+            try { scannerInstance.clear(); } catch (e) {}
+          }
+        } catch (err) {
+          console.error("Error stopping scanner:", err);
+        }
+      }
     }
 
     function adminRemoveCoupon(key) {
@@ -1102,7 +1198,7 @@
       };
 
       targetAcc.walletPoints = currentBal - amount;
-      targetAcc.homePoints = Math.max(0, (targetAcc.homePoints || 0) - amount);
+      targetAcc.homePoints = targetAcc.walletPoints;
       targetAcc.transactions = Array.isArray(targetAcc.transactions) ? targetAcc.transactions : [];
       targetAcc.transactions.unshift(redeemTx);
 
@@ -1110,14 +1206,13 @@
       if (isFirebaseReady && db) {
         db.ref('users/' + phone).update({
           walletPoints: targetAcc.walletPoints,
-          homePoints: targetAcc.homePoints,
+          homePoints: targetAcc.walletPoints,
           transactions: targetAcc.transactions
         });
       }
 
       if (state.activePhone === phone) {
         state.walletPoints = targetAcc.walletPoints;
-        state.homePoints = targetAcc.homePoints;
         state.transactions = targetAcc.transactions;
         updateUI();
       }
